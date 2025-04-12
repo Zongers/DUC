@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit Converter | Workflow</title>
+    <link rel="icon" href="https://i.ibb.co/RpCzFrqK/icon.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #98cc4e;
+            --secondary: #fb0088;
+            --light: #FFFFFF;
+            --dark: #292929;
+            --bg: #F7F7F7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .converter-container {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .converter-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            gap: 15px;
+        }
+
+        .converter-icon {
+            font-size: 1.8rem;
+            color: var(--primary);
+            background: rgba(152,204,78,0.1);
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .converter-title {
+            font-size: 1.5rem;
+            color: var(--dark);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .input-row label {
+            width: 80px;
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        .input-with-button {
+            display: flex;
+            flex: 1;
+            gap: 5px;
+        }
+
+        input, select {
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        input {
+            flex: 1;
+        }
+
+        .plus-button {
+            background-color: var(--primary);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease-in-out;
+        }
+
+        .plus-button:hover {
+            background-color: var(--secondary);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(152,204,78,0.2);
+        }
+
+        .input-expression {
+            margin-top: 5px;
+            margin-left: 80px;
+            font-size: 0.9rem;
+            color: #666;
+            display: none; /* Hide the expression display */
+        }
+
+        .result-container {
+            margin-top: 1.5rem;
+            padding: 1.2rem;
+            background: rgba(152,204,78,0.05);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--dark);
+            min-height: 60px;
+        }
+
+        .result-value {
+            color: var(--secondary);
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+        }
+
+        .clear-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background: #f0f0f0;
+            color: var(--dark);
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .clear-btn:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            .converter-container {
+                padding: 1.5rem;
+            }
+
+            .input-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .input-row label {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+
+            .input-expression {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><i class="fas fa-exchange-alt"></i> Workflow</h1>
+        <p>The productivity suite</p>
+    </div>
+
+    <div class="converter-container">
+        <div class="converter-header">
+            <div class="converter-icon">
+                <i class="fas fa-database"></i>
+            </div>
+            <h2 class="converter-title">Data Unit Converter</h2>
+        </div>
+
+        <div class="input-group">
+            <div class="input-row">
+                <label for="value">Value:</label>
+                <div class="input-with-button">
+                    <input type="text" id="value" placeholder="Enter number (e.g. 100 or 100+50)" autofocus>
+                    <button class="plus-button" id="addValueBtn"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+            <div class="input-expression" id="inputExpression"></div>
+
+            <div class="input-row">
+                <label for="fromUnit">From:</label>
+                <select id="fromUnit">
+                    <option value="KB">Kilobytes (KB)</option>
+                    <option value="MB">Megabytes (MB)</option>
+                    <option value="GB">Gigabytes (GB)</option>
+                </select>
+            </div>
+
+            <div class="input-row">
+                <label for="toUnit">To:</label>
+                <select id="toUnit">
+                    <option value="GB">Gigabytes (GB)</option>
+                    <option value="MB">Megabytes (MB)</option>
+                    <option value="KB">Kilobytes (KB)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="result-container">
+            <div>Converted Value:</div>
+            <div class="result-value" id="convertedValue">-</div>
+        </div>
+
+        <button class="clear-btn" onclick="clearAll()">
+            <i class="fas fa-trash-alt"></i> Clear
+        </button>
+    </div>
+
+    <footer>
+    
+    </footer>
+
+    <script>
+        // Conversion factors
+        const units = {
+            KB: 1,
+            MB: 1024,
+            GB: 1024 * 1024
+        };
+
+        document.getElementById('addValueBtn').addEventListener('click', addPlus);
+        document.getElementById('value').addEventListener('input', convertUnits);
+        document.getElementById('fromUnit').addEventListener('change', convertUnits);
+        document.getElementById('toUnit').addEventListener('change', convertUnits);
+        document.getElementById('value').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addPlus();
+            }
+        });
+
+        function addPlus() {
+            const input = document.getElementById('value');
+            if (input.value.trim() !== "") {
+                input.value = input.value.trim() + '+';
+                input.focus();
+            }
+            convertUnits();
+        }
+
+        function convertUnits() {
+            const input = document.getElementById('value').value.trim();
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+
+            // Update the input expression display
+            document.getElementById('inputExpression').textContent = input ? `Expression: ${input}` : '';
+
+            if (input === '') {
+                document.getElementById('convertedValue').textContent = '-';
+                return;
+            }
+
+            try {
+                // Calculate the sum of all numbers in the expression
+                const sum = input.split('+').reduce((acc, num) => {
+                    const parsed = parseFloat(num.trim());
+                    return acc + (isNaN(parsed) ? 0 : parsed);
+                }, 0);
+
+                if (isNaN(sum)) {
+                    document.getElementById('convertedValue').textContent = 'Invalid input';
+                    return;
+                }
+
+                // Convert to KB first
+                const valueInKB = sum * units[fromUnit];
+
+                // Convert to target unit
+                const convertedValue = valueInKB / units[toUnit];
+
+                // Format to 2 decimal places
+                const formattedValue = convertedValue.toFixed(2);
+
+                // Display result
+                document.getElementById('convertedValue').textContent = `${formattedValue} ${toUnit}`;
+            } catch (e) {
+                document.getElementById('convertedValue').textContent = 'Invalid input';
+            }
+        }
+
+        function clearAll() {
+            document.getElementById('value').value = '';
+            document.getElementById('fromUnit').value = 'KB';
+            document.getElementById('toUnit').value = 'GB';
+            document.getElementById('convertedValue').textContent = '-';
+            document.getElementById('inputExpression').textContent = '';
+            document.getElementById('value').focus();
+        }
+
+        // Initialize with default KB→GB conversion
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('fromUnit').value = 'KB';
+            document.getElementById('toUnit').value = 'GB';
+        });
+    </script>
+</body>
+</html>
